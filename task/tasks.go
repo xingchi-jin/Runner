@@ -2,6 +2,7 @@ package task
 
 type Task struct {
 	Name      string      `json:"name"` // Name be unique within a group
+	Id        string      `json:"id,omitempty"`
 	TaskType  string      `json:"type"`
 	Spec      interface{} `json:"spec"` // Task's payload
 	DependsOn []string    `json:"depends_on"`
@@ -23,7 +24,6 @@ type Export struct {
 type Import struct {
 	TaskName     string `json:"task_name"`
 	VariableName string `json:"name"`
-	value        string
 }
 
 type TaskGroup struct {
@@ -41,6 +41,7 @@ const (
 
 type taskResult struct {
 	TaskName string            `json:"name"`
+	Id       string            `json:"id,omitempty"`
 	Status   TaskStatus        `json:"status"`
 	Output   map[string]string `json:"output"`
 }

@@ -39,7 +39,10 @@ func (ev *GroupVars) Get(task_name, var_name string) (string, error) {
 	if task_vars, ok := ev.groupVars[task_name]; ok {
 		if variable, var_ok := task_vars[var_name]; var_ok {
 			return variable.value, nil
+		} else {
+			return "", errors.New(fmt.Sprintf("%s:%s Not Found. Task doesn't have this output variable", task_name, var_name))
 		}
+	} else {
+		return "", errors.New(fmt.Sprintf("%s:%s Not Found. No variables from task", task_name, var_name))
 	}
-	return "", errors.New(fmt.Sprintf("%s:%s Not Found", task_name, var_name))
 }
