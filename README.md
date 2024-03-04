@@ -3,9 +3,11 @@
   - [About](#about)
   - [Tasks](#tasks)
       - [Schema](#schema)
+      - [Outputs](#outputs)
     - [Task Types](#task-types)
     - [Task Group](#task-group)
       - [Schema](#schema-1)
+      - [Task Group Result](#task-group-result)
     - [Sample](#sample)
 ## About
 Runner support executing tasks in various environments, for example k8s, docker, MacOs, Linux and Windows.
@@ -24,20 +26,32 @@ Runner is a general task engine, it executes tasks. Runner natively implements a
 | imports.[*].variable | The name of the variable to import
 | exports | List of output variables to export. Once exported, those variables will be visible to subsequent tasks 
 | exports.[*].name | The name of the variable to export
-| exports.[*].confidential | if `true`, the variable will be masked in logs 
+| exports.[*].confidential | if `true`, the variable will be masked in logs
+| exports.[*].scope | The scope of the exported variable. Read [output](#outputs)
 | depends_on | Specifies list of tasks need to execute before this one
 | forward | Specifies where to execute the task.
 | forward.to | IP or Hostname of the Runner where the task will be relayed to for execution.
+
+#### Outputs
+`exports` section defines the output variables of this task. There is a scope field in every exported variable. The `scope` defines at which level the variable is accessible.
+
+| scope | description
+| --- | ---
+| local | The variable will be accessible by other task in the same group
+| global | The variable will have `local` accessibility. In addition, it will appear in the [Task Group Result](#task-group-result)
+
 
 ### Task Types
 "os_exec" task provides the ability to run os commands.
 
 ### Task Group
+Runner executes a Task Group at a time.
+
 A task group consists of multiple tasks. Tasks in the task group can have causal dependencies. For example, the input of one task may require the output variables from a previous task. The other example is, one task requires the downloaded artifact from a previous task.
 
-To support variable passing, we provide `export` and `import` declarative. See [example](###Sample).
+To support variable passing, we provide `export` and `import` declarative. See [example](#sample).
 
-To support artifact sharing, we provide `depends_on` declarative. This will make sure the dependent tasks will be executed beforehand. See [example](###Sample).
+To support artifact sharing, we provide `depends_on` declarative. This will make sure the dependent tasks will be executed beforehand. See [example](#sample).
 
 #### Schema
 | config | description
@@ -45,6 +59,17 @@ To support artifact sharing, we provide `depends_on` declarative. This will make
 | taskGroup | A list of tasks to execute
 | forward | Specifies where to execute the task.
 | forward.to | IP or Hostname of the Runner where the task will be relayed to for execution.
+
+#### Task Group Result
+Task Group Result is the execution result of the task group.
+
+| fields | description
+| --- | ---
+| id | id of the task group
+| results[task_name].status | The status of the execution. eg. `failed` `success` `skipped`
+| results[task_name].name | Task name
+| results[task_name].id | Task id
+| results[task_name].outputs | Map of output variable name and value
 
 ### Sample 
 ```
@@ -58,12 +83,13 @@ taskGroup:
   exports:
   - name: password
     confidential: true
+    scope: local
 - name: bar,
   type: os_exec,
   spec:
     command: ["/bin/bash" "-c", "echo '{{ .foo.output.password )}'"],
     envs:
-    - key: value  
+    - key: value
   depends_on: foo,
   imports:
   - from: foo,

@@ -16,9 +16,17 @@ type Task struct {
 // 	// TODO: credentials ?
 // }
 
+type Scope string
+
+const (
+	SCOPE_GLOBAL Scope = "global" // the variable will be exposed in TaskGroupResult
+	SCOPE_GROUP  Scope = "local"  // the variable will not appear in TaskGroupResult but will be accessible by other tasks of the same task group.
+)
+
 type Export struct {
 	VariableName string `json:"name"`
 	Confidential bool   `json:"confidential"`
+	Scope        Scope  `json:"scope"`
 }
 
 type Import struct {
@@ -27,6 +35,7 @@ type Import struct {
 }
 
 type TaskGroup struct {
+	Id    string  `json:"id,omitempty"`
 	Tasks []*Task `json:"tasks"`
 	// TODO: ForwardTo *Forward `json:"forward_to"`
 }
@@ -47,5 +56,6 @@ type taskResult struct {
 }
 
 type TaskGroupResult struct {
+	Id      string                 `json:"id,omitempty"`
 	Results map[string]*taskResult `json:"results"`
 }

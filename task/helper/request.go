@@ -50,6 +50,7 @@ func ReadImports(req *http.Request) (map[string]map[string]string, error) {
 		return body.Imports, err
 	}
 }
+
 func NewRequest(ctx context.Context, spec interface{}, imports *internalvars.Imports) (*http.Request, error) {
 	specBytes, err := json.Marshal(spec)
 	if err != nil {
