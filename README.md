@@ -9,6 +9,7 @@
       - [Schema](#schema-1)
       - [Task Group Result](#task-group-result)
     - [Sample](#sample)
+  - [Next](#next)
 ## About
 Runner support executing tasks in various environments, for example k8s, docker, MacOs, Linux and Windows.
 
@@ -95,3 +96,6 @@ taskGroup:
   - from: foo,
     variable: password
 ```
+
+## Next
+1. Task execution results can be cached. Please read [cache](./cache/README.md#cache)

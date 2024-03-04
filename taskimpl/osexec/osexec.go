@@ -15,6 +15,8 @@ import (
 type OsExecHandler struct {
 }
 
+var TaskName string = "os_exec"
+
 type Spec struct {
 	Command []string `json:"command"`
 
