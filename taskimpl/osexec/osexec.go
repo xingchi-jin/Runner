@@ -19,14 +19,7 @@ var TaskName string = "os_exec"
 
 type Spec struct {
 	Command []string `json:"command"`
-
 	Env    map[string]string `json:"data"`
-	Output *Output           `json:"output"`
-}
-
-type Output struct {
-	Mask      bool     `json:"mask"`
-	Variables []string `json:"variables"`
 }
 
 func (h *OsExecHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +36,7 @@ func (h *OsExecHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: resolve expression in the ENV. The expression should be only about secrets
+	// TODO: resolve inputs in the ENV. The expression should be only about secrets
 
 	// execute the command
 	if err := runCmd(r.Context(), spec.Command, spec.Env); err != nil {

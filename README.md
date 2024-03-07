@@ -41,7 +41,6 @@ Runner is a general task engine, it executes tasks. Runner natively implements a
 | local | The variable will be accessible by other task in the same group
 | global | The variable will have `local` accessibility. In addition, it will appear in the [Task Group Result](#task-group-result)
 
-
 ### Task Types
 "os_exec" task provides the ability to run os commands.
 
@@ -88,7 +87,7 @@ taskGroup:
 - name: bar,
   type: os_exec,
   spec:
-    command: ["/bin/bash" "-c", "echo '{{ .foo.output.password )}'"],
+    command: ["/bin/bash" "-c", "echo '{{ .foo.password )}'"],
     envs:
     - key: value
   depends_on: foo,
@@ -98,4 +97,8 @@ taskGroup:
 ```
 
 ## Next
-1. Task execution results can be cached. Please read [cache](./cache/README.md#cache)
+1. How to do expression evaluation for some use cases [expression evaluation task](./taskimpl/expreval/README.md)
+2. How to fetch secret and how to make secret fetch a swappable "plugin" [Hashicorp Vault Task](./taskimpl/secretfetch/vault/README.md)
+3. How to do secret fetch behind customers' firewall  [task relay](./task/forwardtasks/README.md)
+4. How to run Github actions natively [Github action task](./taskimpl/github_action/README.md)
+5. Task execution results can be cached. Please read [cache](./cache/README.md#cache)

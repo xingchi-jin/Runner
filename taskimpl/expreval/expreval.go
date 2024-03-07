@@ -1,8 +1,11 @@
 package expreval
 
+import "net/http"
+
 var TaskName string = "expression_evalation"
 
 type ExpressionEvaluationTaskHandler struct {
+	dial_home *DialHomeClient
 }
 
 type Spec struct {
@@ -15,4 +18,8 @@ type HarnessContext struct {
 	AccountId string `json:"account_id"`
 	OrgId     string `json:"organization_id"`
 	ProjectId string `json:"project_id"`
+}
+
+type DialHomeClient struct {
+	client *http.Client
 }
