@@ -42,7 +42,8 @@ Runner is a general task engine, it executes tasks. Runner natively implements a
 | global | The variable will have `local` accessibility. In addition, it will appear in the [Task Group Result](#task-group-result)
 
 ### Task Types
-"os_exec" task provides the ability to run os commands.
+Please go to `taskimpl` folder for different implementations of tasks.
+
 
 ### Task Group
 Runner executes a Task Group at a time.
