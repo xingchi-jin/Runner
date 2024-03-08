@@ -21,6 +21,7 @@ Runner unification stands for a new schema of architecture design, where we defi
 ![image](./resources/old.png)
 
 Looking at the architecture today, we have `delegate` `delegate-management-service` `k8s lite engien` `ci-addon` `vm lite engine` all serves as the same purpose: to schedule and execute certain tasks. Therefore, the unification for `Runner` means, we design and implement one `Runner` to replace all these. 
+![image](./resources/new-runner.png)
 
 ### Dispatcher Abstraction
 Runner in general has two types of execution.
@@ -35,7 +36,7 @@ With the `Dispatcher` abstraction, we achieve more unification and thus extremel
 2. Task executed by Runner A requires a secret. However, this secret can only be fetched from Runner B. [details](./task/forwardtasks/README.md)
 
 
-![image](./resources/new-arch.png)
+![image](./resources/dispatcher.png)
 
 ## Primitives
 Coming to design a `Runner`, the important thing is to think what are the primitives a Runner provides.
