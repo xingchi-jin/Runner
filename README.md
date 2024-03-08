@@ -1,6 +1,9 @@
 # Runner
 - [Runner](#runner)
   - [About](#about)
+  - [Runner Unification](#runner-unification)
+    - [Dispatcher Abstraction](#dispatcher-abstraction)
+  - [Primitives](#primitives)
   - [Tasks](#tasks)
       - [Schema](#schema)
       - [Outputs](#outputs)
@@ -12,6 +15,30 @@
   - [Next](#next)
 ## About
 Runner support executing tasks in various environments, for example k8s, docker, MacOs, Linux and Windows.
+
+## Runner Unification
+Runner unification stands for a new schema of architecture design, where we define the abstraction of every component and unify those who are doing the same job. Let's look at what is today
+![image](./resources/old.png)
+
+Looking at the architecture today, we have `delegate` `delegate-management-service` `k8s lite engien` `ci-addon` `vm lite engine` all serves as the same purpose: to schedule and execute certain tasks. Therefore, the unification for `Runner` means, we design and implement one `Runner` to replace all these. 
+
+### Dispatcher Abstraction
+Runner in general has two types of execution.
+1. Run the tasks locally.
+2. Forward the tasks to a remote Runner to run.
+We will design an abstraction called `Dispatcher`. And there are two types
+1. `Local Disatcher`: It will execute a [TaskGroup](#task-group) locally
+2. `Remote Dispatcher`: it will forward a a [TaskGroup](#task-group) to a remote Runner.
+
+With the `Dispatcher` abstraction, we achieve more unification and thus extremely simplify our system. For the below use cases, we can unify into one solution
+1. Some tasks run in the Harness Cloud while some to Run in customers' on-prem
+2. Task executed by Runner A requires a secret. However, this secret can only be fetched from Runner B. [details](./task/forwardtasks/README.md)
+
+
+![image](./resources/new-arch.png)
+
+## Primitives
+Coming to design a `Runner`, the important thing is to think what are the primitives a Runner provides.
 
 ## Tasks
 Runner is a general task engine, it executes tasks. Runner natively implements a list of task types.
@@ -102,4 +129,5 @@ taskGroup:
 2. How to fetch secret and how to make secret fetch a swappable "plugin" [Hashicorp Vault Task](./taskimpl/secretfetch/vault/README.md)
 3. How to do secret fetch behind customers' firewall  [task relay](./task/forwardtasks/README.md)
 4. How to run Github actions natively [Github action task](./taskimpl/github_action/README.md)
-5. Task execution results can be cached. Please read [cache](./cache/README.md#cache)
+5. How to implement your own driver that support customized task types. [drivers](./drivers/README.md)
+6. Task execution results can be cached. Please read [cache](./cache/README.md#cache)
