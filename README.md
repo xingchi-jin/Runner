@@ -40,6 +40,10 @@ With the `Dispatcher` abstraction, we achieve more unification and thus extremel
 
 ## Primitives
 Coming to design a `Runner`, the important thing is to think what are the primitives a Runner provides.
+Runner provides two types of primitives
+1. Task: an execution unit
+2. Relationship: Logistics operators conecting the tasks. They are `depend-on` `if-elese`
+Runner doesn't provide implementation of `orchestration` of step, nor does it provide application features like `failure strategy`. Runner provides primitives to support the system.
 
 ## Tasks
 Runner is a general task engine, it executes tasks. Runner natively implements a list of task types.
