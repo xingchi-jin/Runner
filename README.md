@@ -27,6 +27,7 @@ Looking at the architecture today, we have `delegate` `delegate-management-servi
 Runner in general has two types of execution.
 1. Run the tasks locally.
 2. Forward the tasks to a remote Runner to run.
+   
 We will design an abstraction called `Dispatcher`. And there are two types
 1. `Local Disatcher`: It will execute a [TaskGroup](#task-group) locally
 2. `Remote Dispatcher`: it will forward a a [TaskGroup](#task-group) to a remote Runner.
@@ -34,16 +35,19 @@ We will design an abstraction called `Dispatcher`. And there are two types
 With the `Dispatcher` abstraction, we achieve more unification and thus extremely simplify our system. For the below use cases, we can unify into one solution
 1. Some tasks run in the Harness Cloud while some to Run in customers' on-prem
 2. Task executed by Runner A requires a secret. However, this secret can only be fetched from Runner B. [details](./task/forwardtasks/README.md)
+3. Run tasks in some VMs from a pool
+4. Remote execution of a shell script task, or a custom secret manager's script
 
 
 ![image](./resources/dispatcher.png)
 
+
 ## Primitives
 Coming to design a `Runner`, the important thing is to think what are the primitives a Runner provides.
 Runner provides two types of primitives
-1. Task: an execution unit
-2. Relationship: Logistics operators conecting the tasks. They are `depend-on` `if-elese`
-Runner doesn't provide implementation of `orchestration` of step, nor does it provide application features like `failure strategy`. Runner provides primitives to support the system.
+1. Task: schedule or execute a task
+2. Logistic Operators: Logistics operators connect the tasks. They are `depend-on` `if-elese`
+Runner doesn't provide implementation of `orchestration` of Harness steps, nor does it provide application features like `failure strategy`. Runner provides primitives to support them.
 
 ## Tasks
 Runner is a general task engine, it executes tasks. Runner natively implements a list of task types.

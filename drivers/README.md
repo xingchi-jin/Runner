@@ -62,3 +62,6 @@ taskGroup:
   - from: foo,
     variable: output1
 ```
+
+## Resources
+1. Comparison of Github Action and Nomad Driver [[link](https://harness.atlassian.net/wiki/spaces/~62db3e145eeecd39350a82ea/pages/21675999237/Competitive+Analysis+of+Runner+Actions)]
